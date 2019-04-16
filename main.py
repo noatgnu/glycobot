@@ -1,6 +1,7 @@
 import os
 import argparse
 from BioRxiv_parser import BioRxivParser
+
 "https://www.biorxiv.org/search/abstract_title%3Aglycosylation%20abstract_title_flags%3Amatch-all%20jcode%3Abiorxiv%20subject_collection_code%3ABiochemistry%2CBioinformatics%2CCell%20Biology%2CMolecular%20Biology%20toc_section%3ANew%20Results%2CContradictory%20Results%2CConfirmatory%20Results%20numresults%3A50%20sort%3Apublication-date%20direction%3Adescending%20format_result%3Acondensed"
 "https://www.biorxiv.org/search/glycosylation%20numresults%3A10%20sort%3Apublication-date%20direction%3Adescending"
 base_url = "https://www.biorxiv.org/"

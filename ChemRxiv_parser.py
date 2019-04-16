@@ -1,5 +1,7 @@
 from base_parser import BaseParser
 from requests import Session, Request
+from json import loads
+
 
 base_url = "https://chemrxiv.org/api/items?types=&itemTypes=&licenses=&orderBy=relevant&orderType=desc&limit=40&offset=0&search=glycosylation&institutionId=259"
 
@@ -26,5 +28,7 @@ class ChemRxivParser(BaseParser):
 
     def search(self, terms):
         response = self._request(self.base_url, terms)
+        for i in loads(response.content):
+            print(i)
 
 
