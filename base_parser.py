@@ -1,11 +1,19 @@
+from typing import List
+
 from requests import Session, Request
 
+
 class BaseParser:
-    def __init__(self, base_url):
+    def __init__(self, base_url: str):
         self.base_url = base_url
         self.headers = {"User-Agent": "Python, toan.phung@uq.net.au"}
         print("Initiating session")
         self._request_session = Session()
+
+    def _request(self, url, params):
+        req = Request('GET', url, params=params, headers=self.headers)
+        prepped = self.get_session().prepare_request(req)
+        return self.get_session().send(prepped)
 
     def search(self, *args, **kwargs):
         pass
@@ -13,8 +21,25 @@ class BaseParser:
     def get_session(self):
         return self._request_session
 
+    def close(self):
+        self.get_session().close()
+
+
+class Author:
+    def __init__(self, given_name: str, last_name: str, first: bool = False):
+        self.given_name = given_name
+        self.last_name = last_name
+        self.first = first
+
+    def __repr__(self):
+        return self.given_name + " " + self.last_name
+
+    def __str__(self):
+        return self.given_name + " " + self.last_name
+
+
 class Article:
-    def __init__(self, name, href, authors=None, doi=None):
+    def __init__(self, name: str, href: str, authors: List[Author] = None, doi: str = None):
         self.name = name
         self.href = href
         self.authors = authors
@@ -25,16 +50,3 @@ class Article:
 
     def __str__(self):
         return self.name
-
-
-class Author:
-    def __init__(self, given_name, last_name, first=False):
-        self.given_name = given_name
-        self.last_name = last_name
-        self.first = first
-
-    def __repr__(self):
-        return self.given_name + " " + self.last_name
-
-    def __str__(self):
-        return self.given_name + " " + self.last_name

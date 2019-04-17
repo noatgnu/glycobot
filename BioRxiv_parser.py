@@ -7,33 +7,28 @@ from base_parser import Article, Author, BaseParser
 
 
 class BioRxivParser(BaseParser):
-    def __init__(self, base_url, break_entry=None):
+    def __init__(self, base_url="https://www.biorxiv.org/"):
         super().__init__(base_url)
-        self.base_url = base_url
 
         self.current_page = 0
 
-        if break_entry:
-            print("Stopping at " + break_entry)
         self._request_session = Session()
         self._current_html = None
         self.max_page = 0
         self.stop = False
+        self.break_entry = None
+
+
+    def search(self, topic, max_page=5, req_interval=1, break_entry=None):
         self.break_entry = break_entry
-
-    def _request(self, url):
-        req = Request('GET', url, params={"page": str(self.current_page)}, headers=self.headers)
-        prepped = self.get_session().prepare_request(req)
-        return self.get_session().send(prepped)
-
-    def search(self, topic, max_page=5, req_interval=1):
+        print("Stopping at " + break_entry)
         url = self.base_url + "search/" + topic
-        response = self._request(url)
+        response = self._request(url, params={"page": str(self.current_page)})
         yield self.__parse_biorxiv_page(response.content)
         self.current_page += 1
         if self.max_page != 0:
             while self.current_page < self.max_page and self.current_page < max_page and not self.stop:
-                response = self._request(url)
+                response = self._request(url, params={"page": str(self.current_page)})
                 sleep(req_interval)
                 yield self.__parse_biorxiv_page(response.content)
                 self.current_page += 1

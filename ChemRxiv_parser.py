@@ -1,5 +1,5 @@
-from base_parser import BaseParser
-from requests import Session, Request
+from base_parser import BaseParser, Author, Article
+from requests import Request
 from json import loads
 
 
@@ -11,24 +11,35 @@ class ChemRxivParser(BaseParser):
         super().__init__(base_url)
         self.current_offset = 0
         self.limit = limit
+        self.current_page = 0
 
-    def _request(self, url, search):
-        req = Request('GET', url, params={
+    def search(self, terms, max_page=10, break_entry=None):
+        response = self._request(self.base_url, params={
             "offset": str(self.current_offset),
             "types": "",
             "orderBy": "latest",
             "licenses": "",
             "orderType": "desc",
             "limit": str(self.limit),
-            "search": search,
+            "search": terms,
             "institutionId": 259
-        }, headers=self.headers)
-        prepped = self.get_session().prepare_request(req)
-        return self.get_session().send(prepped)
+        })
+        entries = []
+        content = loads(response.content)
+        for i in content:
+            if break_entry:
+                if break_entry == i["data"]["title"]:
+                    break
+            authors = []
+            for a in i["data"]["authors"]:
+                authors.append(Author(a["name"], ""))
+            entries.append(Article(i["data"]["title"], i["data"]["publicUrl"], authors))
+        yield entries
+        if len(content) == self.limit and self.current_page < max_page:
+            self.current_offset += self.limit
+            yield from self.search(terms, max_page)
+            self.current_page += 1
 
-    def search(self, terms):
-        response = self._request(self.base_url, terms)
-        for i in loads(response.content):
-            print(i)
+
 
 
