@@ -41,5 +41,13 @@ class ChemRxivParser(BaseParser):
             self.current_page += 1
 
 
-
-
+def get_chemrxiv(args):
+    stop_art = None
+    p = ChemRxivParser()
+    a = []
+    for n, i in enumerate(p.search("glycosylation", max_page=args.max, break_entry=args.sc)):
+        if n == 0:
+            stop_art = i[0].name
+        a.append(i)
+    p.close()
+    return a, stop_art
