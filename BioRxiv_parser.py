@@ -18,10 +18,10 @@ class BioRxivParser(BaseParser):
         self.stop = False
         self.break_entry = None
 
-
     def search(self, topic, max_page=5, req_interval=1, break_entry=None):
         self.break_entry = break_entry
-        print("Stopping at " + break_entry)
+        if break_entry:
+            print("Stopping at " + break_entry)
         url = self.base_url + "search/" + topic
         response = self._request(url, params={"page": str(self.current_page)})
         yield self.__parse_biorxiv_page(response.content)
@@ -43,7 +43,6 @@ class BioRxivParser(BaseParser):
             a = search_result.find("a", "highwire-cite-linked-title")
             if self.break_entry:
                 if self.break_entry == a.text:
-                    print("Stopping at " + a.text)
                     self.stop = True
                     return entries
             if a:
@@ -60,7 +59,12 @@ class BioRxivParser(BaseParser):
                 doi = i.find("span", "highwire-cite-metadata-doi")
                 entries.append(Article(a.text, a.get("href"), authors, doi.text[5:]))
 
-        page = soup.find("li", "pager-last")
+        pager = soup.find("ul", "pager-items")
+
+        page = pager.find("li", "pager-last")
+        if not page:
+
+            page = pager.find("li", "last")
         last_page = page.find("a")
         if self.max_page == 0:
             self.max_page = int(last_page.text)
@@ -69,14 +73,14 @@ class BioRxivParser(BaseParser):
 
 def get_biorxiv(args):
     stop_art = None
-    p = BioRxivParser()
+    p = BioRxivParser(base_url=args.bu)
     a = []
     query = "abstract_title%3A{}%20abstract_title_flags%3Amatch-all%20numresults%3A50%20sort%3Apublication-date" \
             "%20direction%3Adescending".format(args.s)
     for n, i in enumerate(p.search(query, max_page=args.max, req_interval=args.ri, break_entry=args.sb)):
-        if n == 0:
-            stop_art = i[0].name
-        print(i)
-        a.append(i)
+        if len(i) > 0:
+            if n == 0:
+                stop_art = i[0].name
+            a += i
     p.close()
     return a, stop_art

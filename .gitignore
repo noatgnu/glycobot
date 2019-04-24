@@ -121,3 +121,4 @@ dmypy.json
 *.csv
 data/
 config.json
+last_seen.json
