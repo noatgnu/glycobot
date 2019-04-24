@@ -25,7 +25,7 @@ class ChemRxivParser(BaseParser):
             "institutionId": 259
         })
         entries = []
-        content = loads(response.content)
+        content = response.json()
         for i in content:
             if break_entry:
                 if break_entry == i["data"]["title"]:
