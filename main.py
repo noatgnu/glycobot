@@ -61,8 +61,9 @@ if __name__ == "__main__":
                     tweet += " " + i.doi
                 else:
                     tweet += " " + i.href
-                if args.at == True:
-                    print("Submitting Tweet.")
+                tweet += " #glycotime"
+                if args.at:
+                    print(tweet)
                     api.update_status(tweet)
                 else:
                     a = input(tweet + " (y/n/stop):")
