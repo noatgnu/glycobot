@@ -32,7 +32,7 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
     print(args.__dict__)
-    art_bio, last_bio  = get_biorxiv(args)
+    art_bio, last_bio = get_biorxiv(args)
     art_chem, last_chem = get_chemrxiv(args)
     if last_bio:
         stop_art["BioRxiv"] = last_bio
