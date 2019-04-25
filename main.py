@@ -46,7 +46,7 @@ if __name__ == "__main__":
     print("Complete.")
 
     if args.et:
-        with open("config.json", "rb") as conf:
+        with open("config.json", "rt") as conf:
             config = load(conf)
             auth = tweepy.OAuthHandler(config["consumer_api"], config["consumer_secret"])
             auth.set_access_token(config["access_token"], config["acess_secret"])
