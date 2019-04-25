@@ -9,7 +9,7 @@ if __name__ == "__main__":
 
     if os.path.isfile("last_seen.json"):
         with open("last_seen.json", "rt") as last:
-            stop_art = load(last)
+            stop_art = load(last.read())
     else:
         stop_art = {
             "BioRxiv": None,
