@@ -27,8 +27,8 @@ if __name__ == "__main__":
     parser.add_argument("--stop-article-chem", dest="sc", type=str, default=stop_art["ChemRxiv"],
                         help="Indicating at which entry should the search end")
     parser.add_argument("--req-interval", dest="ri", type=int, default=1, help="Interval between page navigation")
-    parser.add_argument("--enable-tweet", dest="et", type=bool, default=False, help="Enable tweeting")
-    parser.add_argument("--auto-tweet", dest="at", type=bool, default=False, help="Let glycobot automatically send out tweet of new publication")
+    parser.add_argument("--enable-tweet", dest="et", action='store_true', help="Enable tweeting")
+    parser.add_argument("--auto-tweet", dest="at", action='store_true', help="Let glycobot automatically send out tweet of new publication")
 
     args = parser.parse_args()
     print(args.__dict__)
