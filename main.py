@@ -5,6 +5,7 @@ from ChemRxiv_parser import get_chemrxiv
 from json import load, dumps
 import tweepy
 
+
 if __name__ == "__main__":
 
     if os.path.isfile("last_seen.json"):
@@ -51,9 +52,11 @@ if __name__ == "__main__":
             auth = tweepy.OAuthHandler(config["consumer_api"], config["consumer_secret"])
             auth.set_access_token(config["access_token"], config["acess_secret"])
             api = tweepy.API(auth)
+            print("BioRxiv: {}".format(len(art_bio)))
+            print("ChemRxic: {}".format(len(art_chem)))
             for i in art_bio + art_chem:
                 if len(i.name) > 100:
-                    tweet = i.name[0:100] + " ..."
+                    tweet = i.name[0:100] + "..."
                 else:
                     tweet = i.name
 
@@ -73,4 +76,6 @@ if __name__ == "__main__":
                         pass
                     elif a == "stop":
                         break
-
+    # For deleting all tweet
+    # for status in tweepy.Cursor(api.user_timeline).items():
+    #     api.destroy_status(status.id)
