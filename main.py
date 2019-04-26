@@ -4,10 +4,10 @@ from BioRxiv_parser import get_biorxiv
 from ChemRxiv_parser import get_chemrxiv
 from json import load, dumps
 import tweepy
-
-
+import logging
+import time
 if __name__ == "__main__":
-
+    logging.basicConfig(filename="bot.log", level=logging.DEBUG)
     if os.path.isfile("last_seen.json"):
         with open("last_seen.json", "rt") as last:
             stop_art = load(last)
@@ -65,17 +65,22 @@ if __name__ == "__main__":
                 else:
                     tweet += " " + i.href
                 tweet += " #glycotime"
+
                 if args.at:
                     print(tweet)
+                    logging.info(tweet)
                     api.update_status(tweet)
                 else:
                     a = input(tweet + " (y/n/stop):")
                     if a == "y":
                         api.update_status(tweet)
+                        logging.info(tweet)
                     elif a == "n":
                         pass
                     elif a == "stop":
                         break
+                time.sleep(1)
+
     # For deleting all tweet
     # for status in tweepy.Cursor(api.user_timeline).items():
     #     api.destroy_status(status.id)
