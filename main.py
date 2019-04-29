@@ -79,7 +79,7 @@ if __name__ == "__main__":
                         pass
                     elif a == "stop":
                         break
-                time.sleep(10)
+                time.sleep(3600)
 
     # For deleting all tweet
     # for status in tweepy.Cursor(api.user_timeline).items():
