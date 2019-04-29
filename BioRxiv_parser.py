@@ -57,8 +57,9 @@ class BioRxivParser(BaseParser):
                         first = True
                     author = Author(given_name.text, last_name.text, first)
                     authors.append(author)
-
-                entries.append(Article(a.text, a.get("href"), authors, doi.text[5:].strip()))
+                biorxiv_id = i.find("span", "highwire-cite-metadata-pages")
+                entries.append(Article(a.text, a.get("href"), authors, doi.text[5:].strip(),
+                                       id=biorxiv_id[:-2].strip(), source="BioRxiv"))
 
         pager = soup.find("ul", "pager-items")
 

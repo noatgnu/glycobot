@@ -13,6 +13,7 @@ class ChemRxivParser(BaseParser):
         self.limit = limit
         self.current_page = 0
 
+
     def search(self, terms, max_page=10, break_entry=None):
         response = self._request(self.base_url, params={
             "offset": str(self.current_offset),
@@ -28,12 +29,13 @@ class ChemRxivParser(BaseParser):
         content = response.json()
         for i in content:
             if break_entry:
-                if break_entry == i["data"]["title"]:
+                if break_entry == i["data"]["id"]:
                     break
             authors = []
             for a in i["data"]["authors"]:
                 authors.append(Author(a["name"], ""))
-            entries.append(Article(i["data"]["title"], i["data"]["publicUrl"], authors))
+            entries.append(Article(i["data"]["title"], i["data"]["publicUrl"], authors,
+                                   id=i["data"]["id"], source="ChemRxiv"))
         yield entries
         if len(content) == self.limit and self.current_page < max_page:
             self.current_offset += self.limit
@@ -48,7 +50,7 @@ def get_chemrxiv(args):
     for n, i in enumerate(p.search("glycosylation", max_page=args.max, break_entry=args.sc)):
         if len(i) > 0:
             if n == 0:
-                stop_art = i[0].name
+                stop_art = i[0].id
             a += i
     p.close()
     return a, stop_art

@@ -39,11 +39,17 @@ class Author:
 
 
 class Article:
-    def __init__(self, name: str, href: str, authors: List[Author] = None, doi: str = None):
+    def __init__(self, name: str, href: str, authors: List[Author] = None, doi: str = None, **kwargs):
         self.name = name
         self.href = href
         self.authors = authors
         self.doi = doi
+        self.id = ""
+        self.source = ""
+        print(kwargs)
+        for k in kwargs:
+            if k in self.__dict__:
+                setattr(self, k, kwargs[k])
 
     def __repr__(self):
         return self.name
