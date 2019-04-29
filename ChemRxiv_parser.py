@@ -47,7 +47,7 @@ def get_chemrxiv(args):
     stop_art = None
     p = ChemRxivParser(base_url=args.cu)
     a = []
-    for n, i in enumerate(p.search("glycosylation", max_page=args.max, break_entry=args.sc)):
+    for n, i in enumerate(p.search("glycosylation", max_page=args.max, break_entry=str(args.sc))):
         if len(i) > 0:
             if n == 0:
                 stop_art = i[0].id
