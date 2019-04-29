@@ -1,6 +1,4 @@
 from base_parser import BaseParser, Author, Article
-from requests import Request
-from json import loads
 
 
 base_url = "https://chemrxiv.org/api/items?types=&itemTypes=&licenses=&orderBy=relevant&orderType=desc&limit=40&offset=0&search=glycosylation&institutionId=259"
@@ -29,13 +27,13 @@ class ChemRxivParser(BaseParser):
         content = response.json()
         for i in content:
             if break_entry:
-                if break_entry == i["data"]["id"]:
+                if break_entry == str(i["data"]["id"]):
                     break
             authors = []
             for a in i["data"]["authors"]:
                 authors.append(Author(a["name"], ""))
             entries.append(Article(i["data"]["title"], i["data"]["publicUrl"], authors,
-                                   id=i["data"]["id"], source="ChemRxiv"))
+                                   id=str(i["data"]["id"]), source="ChemRxiv"))
         yield entries
         if len(content) == self.limit and self.current_page < max_page:
             self.current_offset += self.limit
@@ -47,7 +45,7 @@ def get_chemrxiv(args):
     stop_art = None
     p = ChemRxivParser(base_url=args.cu)
     a = []
-    for n, i in enumerate(p.search("glycosylation", max_page=args.max, break_entry=str(args.sc))):
+    for n, i in enumerate(p.search("glycosylation", max_page=args.max, break_entry=args.sc)):
         if len(i) > 0:
             if n == 0:
                 stop_art = i[0].id
