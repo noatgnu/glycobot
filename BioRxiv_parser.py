@@ -42,7 +42,7 @@ class BioRxivParser(BaseParser):
             search_result = i.find("span", "highwire-cite-title")
             a = search_result.find("a", "highwire-cite-linked-title")
             if self.break_entry:
-                if self.break_entry == a.text:
+                if self.break_entry == a.doi:
                     self.stop = True
                     return entries
             if a:
@@ -80,7 +80,7 @@ def get_biorxiv(args):
     for n, i in enumerate(p.search(query, max_page=args.max, req_interval=args.ri, break_entry=args.sb)):
         if len(i) > 0:
             if n == 0:
-                stop_art = i[0].name
+                stop_art = i[0].doi
             a += i
     p.close()
     return a, stop_art

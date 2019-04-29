@@ -30,6 +30,8 @@ if __name__ == "__main__":
     parser.add_argument("--req-interval", dest="ri", type=int, default=1, help="Interval between page navigation")
     parser.add_argument("--enable-tweet", dest="et", action='store_true', help="Enable tweeting")
     parser.add_argument("--auto-tweet", dest="at", action='store_true', help="Let glycobot automatically send out tweet of new publication")
+    parser.add_argument("--auto-tweet-delay", dest="ad", type=int, default=3600,
+                        help="Delay interval between tweet")
 
     args = parser.parse_args()
     print(args.__dict__)
@@ -79,7 +81,7 @@ if __name__ == "__main__":
                         pass
                     elif a == "stop":
                         break
-                time.sleep(3600)
+                time.sleep(args.ad)
 
     # For deleting all tweet
     # for status in tweepy.Cursor(api.user_timeline).items():
