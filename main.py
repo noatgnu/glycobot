@@ -38,9 +38,9 @@ if __name__ == "__main__":
     art_bio, last_bio = get_biorxiv(args)
     art_chem, last_chem = get_chemrxiv(args)
     if last_bio:
-        stop_art["BioRxiv"] = last_bio
+        stop_art["BioRxiv"] = last_bio.strip()
     if last_chem:
-        stop_art["ChemRxiv"] = last_chem
+        stop_art["ChemRxiv"] = last_chem.strip()
 
     with open("last_seen.json", "wt") as last:
         s = dumps(stop_art)
