@@ -57,8 +57,8 @@ if __name__ == "__main__":
             print("BioRxiv: {}".format(len(art_bio)))
             print("ChemRxic: {}".format(len(art_chem)))
             for i in art_bio + art_chem:
-                if len(i.name) > 100:
-                    tweet = i.name[0:100] + "..."
+                if len(i.name) > 200:
+                    tweet = i.name[0:200] + "..."
                 else:
                     tweet = i.name
 
