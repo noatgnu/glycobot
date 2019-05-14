@@ -77,7 +77,7 @@ def get_biorxiv(args):
     stop_art = None
     p = BioRxivParser(base_url=args.bu)
     a = []
-    query = "abstract_title%3A{}%20abstract_title_flags%3Amatch-all%20numresults%3A50%20sort%3Apublication-date" \
+    query = "abstract_title%3A{}%20abstract_title_flags%3Amatch-any%20numresults%3A50%20sort%3Apublication-date" \
             "%20direction%3Adescending".format(args.s)
     for n, i in enumerate(p.search(query, max_page=args.max, req_interval=args.ri, break_entry=args.sb)):
         if len(i) > 0:
