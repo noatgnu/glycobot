@@ -24,7 +24,9 @@ class BioRxivParser(BaseParser):
             print("Stopping at " + break_entry)
         url = self.base_url + "search/" + topic
         response = self._request(url, params={"page": str(self.current_page)})
+        print(response.url)
         yield self.__parse_biorxiv_page(response.content)
+
         self.current_page += 1
         if self.max_page != 0:
             while self.current_page < self.max_page and self.current_page < max_page and not self.stop:
@@ -36,6 +38,7 @@ class BioRxivParser(BaseParser):
 
     def __parse_biorxiv_page(self, html_content):
         soup = BeautifulSoup(html_content, "lxml")
+        print(soup.contents)
         content = soup.find_all("li", "search-result")
         entries = []
         for i in content:
@@ -50,13 +53,16 @@ class BioRxivParser(BaseParser):
                 authors_search = i.find("span", "highwire-citation-authors")
                 authors = []
                 for au in authors_search.find_all("span", "highwire-citation-author"):
+
                     given_name = au.find("span", "nlm-given-names")
-                    last_name = au.find("span", "nlm-surname")
-                    first = False
-                    if "first" in au.attrs["class"]:
-                        first = True
-                    author = Author(given_name.text, last_name.text, first)
-                    authors.append(author)
+                    if given_name:
+                        last_name = au.find("span", "nlm-surname")
+                        first = False
+                        if "first" in au.attrs["class"]:
+                            first = True
+
+                        author = Author(given_name.text, last_name.text, first)
+                        authors.append(author)
                 biorxiv_id = i.find("span", "highwire-cite-metadata-pages")
                 entries.append(Article(a.text, a.get("href"), authors, doi.text[5:].strip(),
                                        id=biorxiv_id.text[:-2].strip(), source="BioRxiv"))
