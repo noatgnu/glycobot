@@ -25,8 +25,9 @@ class ChemRxivParser(BaseParser):
         })
         entries = []
         content = response.json()
-        print(content["items"])
+        count = 0
         for i in content["items"]:
+            print(i)
             if break_entry:
                 if break_entry == str(i["data"]["id"]):
                     break
@@ -36,10 +37,12 @@ class ChemRxivParser(BaseParser):
             entries.append(Article(i["data"]["title"], i["data"]["publicUrl"], authors,
                                    id=str(i["data"]["id"]), source="ChemRxiv"))
         yield entries
-        if len(content["items"]) == self.limit and self.current_page < max_page:
-            self.current_offset += self.limit
-            yield from self.search(terms, max_page)
-            self.current_page += 1
+
+        # if len(content["items"]) == self.limit and self.current_page < max_page:
+        #     print(self.limit, self.current_page, max_page)
+        #     self.current_offset += self.limit
+        #     yield from self.search(terms, max_page)
+        #     self.current_page += 1
 
 
 def get_chemrxiv(args):

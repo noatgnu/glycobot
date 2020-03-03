@@ -13,6 +13,7 @@ class BaseParser:
     def _request(self, url, params):
         req = Request('GET', url, params=params, headers=self.headers)
         prepped = self.get_session().prepare_request(req)
+        print(prepped.url)
         return self.get_session().send(prepped)
 
     def search(self, *args, **kwargs):
