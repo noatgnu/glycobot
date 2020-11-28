@@ -19,7 +19,7 @@ class ChemRxivParser(BaseParser):
             "orderBy": "latest",
             "licenses": "",
             "orderType": "desc",
-            "limit": str(self.limit),
+            #"limit": str(self.limit),
             "search": terms,
             "institutionId": 259
         })
