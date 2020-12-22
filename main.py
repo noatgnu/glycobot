@@ -61,11 +61,11 @@ if __name__ == "__main__":
                     tweet = i.name[0:200] + "..."
                 else:
                     tweet = i.name
-
-                if i.doi:
-                    tweet += " " + i.doi
-                else:
-                    tweet += " " + i.href
+                tweet += " " + i.href
+                # if i.doi:
+                #     tweet += " " + i.doi
+                # else:
+                #     tweet += " " + i.href
                 tweet += " #glycotime"
 
                 if args.at:
