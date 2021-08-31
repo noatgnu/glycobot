@@ -38,7 +38,7 @@ class BioRxivParser(BaseParser):
 
     def __parse_biorxiv_page(self, html_content):
         soup = BeautifulSoup(html_content, "lxml")
-        print(soup.contents)
+        #print(soup.contents)
         content = soup.find_all("li", "search-result")
         entries = []
         for i in content:
@@ -83,12 +83,13 @@ def get_biorxiv(args):
     stop_art = None
     p = BioRxivParser(base_url=args.bu)
     a = []
-    query = "abstract_title%3A{}%20abstract_title_flags%3Amatch-any%20numresults%3A50%20sort%3Apublication-date" \
+    query = "abstract_title%3A{}%20abstract_title_flags%3Amatch-any%20numresults%3A10%20sort%3Apublication-date" \
             "%20direction%3Adescending".format(args.s)
     for n, i in enumerate(p.search(query, max_page=args.max, req_interval=args.ri, break_entry=args.sb)):
         if len(i) > 0:
             if n == 0:
                 stop_art = i[0].doi
             a += i
+
     p.close()
     return a, stop_art

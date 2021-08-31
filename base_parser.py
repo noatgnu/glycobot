@@ -10,8 +10,11 @@ class BaseParser:
         print("Initiating session")
         self._request_session = Session()
 
-    def _request(self, url, params):
-        req = Request('GET', url, params=params, headers=self.headers)
+    def _request(self, url, params=None, data=None, request_type = 'GET'):
+        if request_type == 'GET':
+            req = Request(request_type, url, params=params, headers=self.headers)
+        elif request_type == 'POST':
+            req = Request(request_type, url, json=data, headers=self.headers)
         prepped = self.get_session().prepare_request(req)
         print(prepped.url)
         return self.get_session().send(prepped)
